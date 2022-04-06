@@ -257,6 +257,14 @@ data.replace('h', 8, inplace=True)
 data.loc[data['result']!='draw', 'result'] = -1
 data.loc[data['result']=='draw', 'result'] = 1
 
+# 将数据处理
+sample = data.to_numpy()
+np.random.shuffle(sample)
+XTraining = sample[:5000, :-1].astype(np.float32)
+YTraining =  sample[:5000, -1]
+XTesting = sample[5000: , :-1].astype(np.float32)
+YTesting =  sample[5000: , -1]
+
 # 标准化
 meanX = np.mean(XTraining, axis=0)
 stdX = np.std(XTraining, axis=0)
