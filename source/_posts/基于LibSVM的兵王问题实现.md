@@ -133,7 +133,7 @@ XTesting = (XTesting - meanX) / stdX
 
 ## 2. 超参数选择
 
-我们选择 RBF 内核的支持向量机，有两个超参数 $C$，$\gamma$ 进行确定。LibSVM 的帮助文档中建议 $C\in [2^{-5}, 2^{15}]$，$\gamma\in[2^{-15},2^{3}]$；这里我们遵循文档规定，在此范围内进行粗略搜索
+我们选择 RBF 内核的支持向量机，有两个超参数 $C$，$\gamma$ 进行确定。LibSVM 的帮助文档中建议 $C\in [2^{-5}, 2^{15}]$，$\gamma\in[2^{-15},2^{3}]$。这里我们遵循文档规定，在此范围内进行粗略搜索；同时这里采用五折交叉验证方法对超参数的优劣进行判断
 
 ```python
 In[2]:
@@ -256,6 +256,14 @@ data.replace('g', 7, inplace=True)
 data.replace('h', 8, inplace=True)
 data.loc[data['result']!='draw', 'result'] = -1
 data.loc[data['result']=='draw', 'result'] = 1
+
+# 将数据处理
+sample = data.to_numpy()
+np.random.shuffle(sample)
+XTraining = sample[:5000, :-1].astype(np.float32)
+YTraining =  sample[:5000, -1]
+XTesting = sample[5000: , :-1].astype(np.float32)
+YTesting =  sample[5000: , -1]
 
 # 标准化
 meanX = np.mean(XTraining, axis=0)
