@@ -21,6 +21,7 @@ $ ubuntu-drivers devices
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/d20e252d431347cc874e0c06313a79dd.png)
 返回的信息显示，安装的显卡驱动版本为 515， 最高可支持 11.7 的 cuda；到这里就说明我们的驱动已经安装成功了！！！
+
 ## 2. 安装 cuda
 具体安装何版本的 cuda 取决于 pytorch 的版本。进入[pytorch官方安装页面](https://pytorch.org/get-started/locally/)，选择对应的版本
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/06441e839f344ee4bc5d3d28873449a6.png)
@@ -33,6 +34,7 @@ $ ubuntu-drivers devices
 点击进入，选择自己系统对应的版本，在终端中运行其提供的命令即可
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/8f81a325e00f482f9cd3de75b9d02337.png)
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/7edc450ef0eb44c8bc9782b883ae412f.png)
+
 ## 3. 配置环境变量
 进入根目录，修改 bashrc 文件并添加环境变量。这一步的目的是为了让程序能够找到 cuda 的位置
 ```
@@ -48,6 +50,7 @@ export PATH=$PATH:$LD_LIBRARY_PATH:$CUDA_HOME
 终端运行 `nvcc -V` 命令查看是否成功
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/d5d760636aaf4094b68f414fcd16dec9.png)
+
 ## 4. 安装 pytorch
 直接终端运行官方提供的下载命令
 ```
