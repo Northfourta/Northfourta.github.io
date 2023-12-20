@@ -568,7 +568,7 @@ post:
       awl: 2
       # 每分钟阅读字数，如果大部分是技术文章可适度调低
       # Words per minute
-      wpm: 60
+      wpm: 300
 
     # 浏览量计数
     # Number of visits
@@ -695,7 +695,7 @@ post:
   math:
     # 开启后文章默认可用，自定义页面如需使用，需在 Front-matter 中指定 `math: true`
     # If you want to use math on the custom page, you need to set `math: true` in Front-matter
-    enable: false
+    enable: true
 
     # 开启后，只有在文章 Front-matter 里指定 `math: true` 才会在文章页启动公式转换，以便在页面不包含公式时提高加载速度
     # If true, only set `math: true` in Front-matter will enable math, to load faster when the page does not contain math
@@ -1031,6 +1031,7 @@ links:
 # DO NOT EDIT THE FOLLOWING SETTINGS UNLESS YOU KNOW WHAT YOU ARE DOING
 #---------------------------
 
+
 static_prefix:
   # 内部静态
   # Internal static
@@ -1077,3 +1078,12 @@ static_prefix:
   twikoo: https://lib.baomitu.com/twikoo/1.4.17/
 
   hint: https://lib.baomitu.com/hint.css/2.7.0/
+
+# pdfjs
+# pdfjs.enable: 表示是否启用pdfjs插件，这里设置为true，即启用。
+# pdfjs.src: 表示pdf.js文件的相对路径，即PDF.js的核心代码所在位置。
+# pdfjs.workerSrc: 表示pdf.worker.js文件的相对路径，即PDF.js中文档渲染所需要的Worker线程代码所在位置。
+pdfjs:
+  enable: true
+  src: /pdfjs/build/pdf.js
+  workerSrc: /pdfjs/build/pdf.worker.js
