@@ -72,7 +72,7 @@ npm install hexo-asset-image --save
 
 
 
-+ **多余的`/.io`**怎么处理呢？
++ **多余的`/.io`怎么处理呢？**
 
   经过官网查询，发现这个问题是`hexo-asset-image/index.js`中的一行代码导致的，原作者已经修复<u>（[域名是xxx.io的情况下，图片路径会从原本/xxx.jpg变成 /.io/xxx.jpg · Issue #47 · xcodebuild/hexo-asset-image (github.com)](https://github.com/xcodebuild/hexo-asset-image/issues/47)）</u>，不知为何我下载的依旧是旧版本
 
