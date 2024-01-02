@@ -57,8 +57,27 @@ Results saved to runs\detect\predict
 💡 Learn more at https://docs.ultralytics.com/modes/predict
 ```
 
-## 2、安装 labelme
-参考 [官网安装](https://github.com/labelmeai/labelme)
+## 2、安装数据标注工具
+
+### 2.1 标注工具基本介绍
+
+这里只介绍两种标注工具：`labelimg`、`labelme`；LabelMe和LabelImg都是用于图像标注的工具，但它们有一些不同之处：
+
+1. **开发者和平台：**
+   - LabelMe：LabelMe是由麻省理工学院（MIT）开发的在线标注工具，允许用户标注图像，并支持多种标注格式。
+   - LabelImg：LabelImg是由Tzutalin开发的开源工具，它是一个基于Python的图像标注工具，可以在本地使用，支持多种格式的图像标注。
+3. **功能：**
+   - LabelMe：LabelMe提供了一些高级的标注功能，如<u>实例分割（不仅限于矩形框标注）和复杂形状标注</u>的能力。
+   - LabelImg：LabelImg相对简单，适用于一般的对象检测任务，支持<u>常见的矩形标注和类别标签</u>。
+4. **使用场景和灵活性：**
+   - LabelMe：<u>适合需要更复杂标注需求（如实例分割）的项目</u>，同时需要在线协作或访问的团队。
+   - LabelImg：<u>适合简单的对象检测标注需求</u>，更适合个人或小团队在本地使用。
+
+选择使用哪个工具取决于你的具体需求和标注的复杂程度。如果你需要更高级的标注功能并且团队需要在线协作，LabelMe可能更适合；而如果你只需要简单的对象检测标注，LabelImg可能更加方便。这里我们只是进行简单的目标检测，选择使用LabelImg；当然你也可以选用LabelMe，注意LabelMe标注生成的文件为json，还需额外脚本将其生成txt才能用作yolo训练。
+
+### 2.2 LabelMe安装
+
+参考 [GitHub主页](https://github.com/labelmeai/labelme)安装：
 ```bash
 conda create --name=labelme python=3
 conda activate labelme
@@ -68,9 +87,21 @@ pip install labelme
 # https://github.com/wkentaro/labelme/releases
 ```
 运行
-```
+```bash
 labelme
 ```
+### 2.3 LabelImg安装
+
+参考 [github主页](https://github.com/HumanSignal/labelImg)安装步骤安装：
+
+```bash
+conda install pyqt=5
+conda install -c anaconda lxml
+pyrcc5 -o libs/resources.py resources.qrc
+python labelImg.py
+python labelImg.py [IMAGE_PATH] [PRE-DEFINED CLASS FILE]
+```
+
 ## 3、训练模型
 
 ### 2.1 创建数据加载配置文件
@@ -89,7 +120,20 @@ labelme
 
 ---
 
-### 2.2 开始训练
+### 2.2 创建数据集
+
+步骤（YOLO）：
+1. 在 data/predefined_classes.txt 文件中定义将用于训练的类别列表。
+2. 使用上述说明构建并启动。
+3. 在工具栏中的“保存”按钮正下方，点击“PascalVOC”按钮切换到YOLO格式。
+4. 您可以使用“打开/Open”或“打开/OpenDIR”来处理单个或多个图像。处理完单个图像后，请点击保存。
+   YOLO格式的txt文件将保存在与图像同名的文件夹中。名为“classes.txt”的文件也将保存在该文件夹中。 “classes.txt”定义了YOLO标签所引用的类别列表。
+
+**注意：**
+
+在处理图像列表时，您的标签列表不应该在处理过程中更改。当您保存一张图像时，classes.txt也会被更新，而之前的注释不会被更新。在保存为YOLO格式时，不应使用“默认类别”功能，它不会被引用。保存为YOLO格式时，“difficult”标志会被丢弃。 
+
+### 2.3 开始训练
 
 ```bash
 yolo task=detect mode=train model=yolov8s.yaml data=mydata_tuomin/tuomin.yaml epochs=100 batch=4 device=0
