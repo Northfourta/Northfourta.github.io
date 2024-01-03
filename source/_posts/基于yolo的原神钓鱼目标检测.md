@@ -14,7 +14,7 @@ tags:
 pip install torch==1.8.1+cu111 torchvision==0.9.1+cu111 torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.html
 ```
 > 建议先安装 torch，再安装 yolo；若先安装 yolo，系统会自行安装 torch-cpu，还需卸载
-### 1.3 安装 yolov8
+### 1.3 安装 YOLOv8
 
 git 拉取 [ultralytics: YOLOv8 🚀 Ultralytics 同步更新官方最新版 YOLOv8 (gitee.com)](https://gitee.com/monkeycc/ultralytics):
 
@@ -131,7 +131,97 @@ python labelImg.py [IMAGE_PATH] [PRE-DEFINED CLASS FILE]
 
 **注意：**
 
-在处理图像列表时，您的标签列表不应该在处理过程中更改。当您保存一张图像时，classes.txt也会被更新，而之前的注释不会被更新。在保存为YOLO格式时，不应使用“默认类别”功能，它不会被引用。保存为YOLO格式时，“difficult”标志会被丢弃。 
+在处理图像列表时，您的标签列表不应该在处理过程中更改。当您保存一张图像时，classes.txt也会被更新，而之前的注释不会被更新。在保存为YOLO格式时，不应使用“默认类别”功能，它不会被引用。保存为YOLO格式时，“difficult”标志会被丢弃。
+
+### 2.3 数据集划分
+
+ 在前面创建的imges及labels文件夹下存放划分后的数据集
+
+```python
+import os, shutil, random
+from tqdm import tqdm
+
+"""
+标注文件是yolo格式（txt文件）
+训练集：验证集：测试集 （7：2：1） 
+"""
+
+
+def split_img(img_path, label_path, split_list):
+    try:
+        Data = './genish_auto_fish'
+        # Data是你要将要创建的文件夹路径（路径一定是相对于你当前的这个脚本而言的）
+        # os.mkdir(Data)
+
+        train_img_dir = Data + '/images/train'
+        val_img_dir = Data + '/images/val'
+        test_img_dir = Data + '/images/test'
+
+        train_label_dir = Data + '/labels/train'
+        val_label_dir = Data + '/labels/val'
+        test_label_dir = Data + '/labels/test'
+
+        # 创建文件夹
+        os.makedirs(train_img_dir)
+        os.makedirs(train_label_dir)
+        os.makedirs(val_img_dir)
+        os.makedirs(val_label_dir)
+        os.makedirs(test_img_dir)
+        os.makedirs(test_label_dir)
+
+    except:
+        print('文件目录已存在')
+
+    train, val, test = split_list
+    all_img = os.listdir(img_path)
+    all_img_path = [os.path.join(img_path, img) for img in all_img]
+    # all_label = os.listdir(label_path)
+    # all_label_path = [os.path.join(label_path, label) for label in all_label]
+    train_img = random.sample(all_img_path, int(train * len(all_img_path)))
+    train_img_copy = [os.path.join(train_img_dir, img.split('\\')[-1]) for img in train_img]
+    train_label = [toLabelPath(img, label_path) for img in train_img]
+    train_label_copy = [os.path.join(train_label_dir, label.split('\\')[-1]) for label in train_label]
+    for i in tqdm(range(len(train_img)), desc='train ', ncols=80, unit='img'):
+        _copy(train_img[i], train_img_dir)
+        _copy(train_label[i], train_label_dir)
+        all_img_path.remove(train_img[i])
+    val_img = random.sample(all_img_path, int(val / (val + test) * len(all_img_path)))
+    val_label = [toLabelPath(img, label_path) for img in val_img]
+    for i in tqdm(range(len(val_img)), desc='val ', ncols=80, unit='img'):
+        _copy(val_img[i], val_img_dir)
+        _copy(val_label[i], val_label_dir)
+        all_img_path.remove(val_img[i])
+    test_img = all_img_path
+    test_label = [toLabelPath(img, label_path) for img in test_img]
+    for i in tqdm(range(len(test_img)), desc='test ', ncols=80, unit='img'):
+        _copy(test_img[i], test_img_dir)
+        _copy(test_label[i], test_label_dir)
+
+
+def _copy(from_path, to_path):
+    shutil.copy(from_path, to_path)
+
+
+def toLabelPath(img_path, label_path):
+    img = img_path.split('\\')[-1]
+    label = img.split('.')[0] + '.txt'
+    return os.path.join(label_path, label)
+
+
+if __name__ == '__main__':
+    img_path = './genish_auto_fish/imagesAll'  # 你的图片存放的路径（路径一定是相对于你当前的这个脚本文件而言的）
+    label_path = './genish_auto_fish/labelsAll'  # 你的txt文件存放的路径（路径一定是相对于你当前的这个脚本文件而言的）
+    split_list = [0.7, 0.2, 0.1]  # 数据集划分比例[train:val:test]
+    split_img(img_path, label_path, split_list)
+```
+
+脚本运行后，生成将标注好的数据随机划分到各自的文件夹中，label同理
+
+![image-20240103110930577](基于yolo的原神钓鱼目标检测/image-20240103110930577.png)
+
+在对应yaml配置文件中配置好自己数据集的相关信息，以备训练
+
+![image-20240103111433341](基于yolo的原神钓鱼目标检测/image-20240103111433341.png)
 
 ### 2.3 开始训练
 
@@ -143,15 +233,35 @@ yolo task=detect mode=train model=yolov8s.yaml data=mydata_tuomin/tuomin.yaml ep
 
 📌task：选择任务类型，可选['detect', 'segment', 'classify', 'init']。
 
-📌mode: 选择是训练、验证还是预测的任务蕾西 可选['train', 'val', 'predict']。
+📌mode: 选择是训练、验证还是预测的任务类型，可选['train', 'val', 'predict']。
 
-📌model: 选择yolov8不同的模型配置文件，可选yolov8s.yaml、yolov8m.yaml、yolov8x.yaml等。
+📌model: 选择yolov8不同的模型配置文件，可选yolov8s.yaml、yolov8m.yaml、yolov8x.yaml等，也可选择已经训练好的预训练权重（yolov8s.pt、yolov8m.pt）。
 
-📌data: 选择生成的数据集配置文件
+​	选择.pt和.yaml的区别（[YOLOv8训练参数详解](https://blog.csdn.net/qq_37553692/article/details/130898732)）
 
-📌epochs：指的就是训练过程中整个数据集将被迭代多少次,显卡不行你就调小点。
++ .pt类型的文件是从预训练模型的基础上进行训练。若我们选择 yolov8n.pt这种.pt类型的文件，其实里面是包含了模型的结构和训练好的参数的，也就是说拿来就可以用，就已经具备了检测目标的能力了，yolov8n.pt能检测coco中的80个类别。假设你要检测不同种类的狗，那么yolov8n.pt原本可以检测狗的能力对你训练应该是有帮助的，你只需要在此基础上提升其对不同狗的鉴别能力即可。但如果你需要检测的类别不在其中，例如口罩检测，那么就帮助不大。
++ `.yaml`文件是从零开始训练。采用`yolov8n.yaml`这种.yaml文件的形式，在文件中指定类别，以及一些别的参数。
 
-📌batch：一次看完多少张图片才进行权重更新，梯度下降的mini-batch,显卡不行你就调小点。
+📌data: 选择生成的数据集配置文件，即前面的fish.yaml
 
----
+📌epochs：训练的轮次数量，指的就是训练过程中整个数据集将被迭代多少次。
 
+📌batch：每批图像数量（-1为自动批大小）；一次看完多少张图片才进行权重更新，梯度下降的mini-batch，显卡不行你就调小点。
+
+📌device：可以使用`device`参数指定训练设备。如果没有传递参数，并且有可用的GPU，则将使用GPU `device=0`，否则将使用`device=cpu`。
+
+> 更详细的介绍，可前往查阅 yolov8技术文档的训练章节（ [训练 - Ultralytics YOLOv8 文档](https://docs.ultralytics.com/zh/modes/train/#_4)）
+
+训练完成后，系统会输出权重储存路径：
+
+![image-20240103212134460](基于yolo的原神钓鱼目标检测/image-20240103212134460.png)
+
+Reference：
+
+1. [Ultralytics YOLOv8 文档](https://docs.ultralytics.com/zh/quickstart/#conda-docker)
+2. [win10下Tensorflow与Pytorch安装教程-CSDN博客](https://blog.csdn.net/weixin_44349241/article/details/114333235)
+3. [PyTorch文档](https://pytorch.org/get-started/previous-versions/)
+4. [labelImg README zh](https://github.com/HumanSignal/labelImg/blob/master/readme/README.zh.rst)
+5. [YOLOv8 从环境搭建到推理训练_yolov8 predict-CSDN博客](https://blog.csdn.net/weixin_61988885/article/details/129421538?share_token=dad53e58-4c3a-4935-9a84-56924d78a2af)
+6. [教程：超详细从零开始yolov5模型训练_yolo训练-CSDN博客](https://blog.csdn.net/qq_45701791/article/details/113992622)
+7. [YOLOv8训练参数详解（全面详细、重点突出、大白话阐述小白也能看懂）_yolov8参数-CSDN博客](https://blog.csdn.net/qq_37553692/article/details/130898732)
