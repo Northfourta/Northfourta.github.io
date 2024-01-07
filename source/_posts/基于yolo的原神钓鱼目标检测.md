@@ -223,7 +223,7 @@ if __name__ == '__main__':
 
 ![image-20240103111433341](基于yolo的原神钓鱼目标检测/image-20240103111433341.png)
 
-### 2.3 开始训练
+### 2.3 模型训练
 
 ```bash
 yolo task=detect mode=train model=yolov8s.yaml data=mydata_tuomin/tuomin.yaml epochs=100 batch=4 device=0
@@ -255,6 +255,68 @@ yolo task=detect mode=train model=yolov8s.yaml data=mydata_tuomin/tuomin.yaml ep
 训练完成后，系统会输出权重储存路径：
 
 ![image-20240103212134460](基于yolo的原神钓鱼目标检测/image-20240103212134460.png)
+
+## 4、 对原神窗口进行实时目标检测
+
+网上查询了窗口图像采集的方案，最终选定pywin32库进行程序窗口的图像采集
+
+```python
+import win32gui, win32ui, win32con
+import cv2
+import numpy
+from ultralytics import YOLO
+
+if __name__ == '__main__':
+    window_name = "原神"
+    # 获得窗口句柄
+    hWnd = win32gui.FindWindow(None, window_name)
+    # 加载训练好的yolo模型
+    model = YOLO('best.pt')
+    # 获取句柄窗口的大小信息
+    left, top, right, bot = win32gui.GetClientRect(hWnd)
+    print(left, top, right, bot)
+    width = (right - left)
+    height = (bot - top)
+    # 命名输出的窗口名
+    cv2.namedWindow('im_opencv')
+    # 返回句柄窗口的设备环境，覆盖整个窗口，包括非客户区，标题栏，菜单，边框
+    hWndDC = win32gui.GetWindowDC(hWnd)
+    # 创建设备描述表
+    mfcDC = win32ui.CreateDCFromHandle(hWndDC)
+    # 创建内存设备描述表
+    saveDC = mfcDC.CreateCompatibleDC()
+    # 创建位图对象准备保存图片
+    saveBitMap = win32ui.CreateBitmap()
+
+    while True:
+        # 为bitmap开辟存储空间
+        saveBitMap.CreateCompatibleBitmap(mfcDC, width, height)
+        # 将截图保存到saveBitMap中
+        saveDC.SelectObject(saveBitMap)
+        # 保存bitmap到内存设备描述表
+        saveDC.BitBlt((0, 0), (width, height), mfcDC, (0, 0), win32con.SRCCOPY)
+        # opencv+numpy保存
+        ##获取位图信息
+        signedIntsArray = saveBitMap.GetBitmapBits(True)
+        ## 图像转换成ndarray
+        im_opencv = numpy.frombuffer(signedIntsArray, dtype='uint8')
+        im_opencv.shape = (height, width, 4)
+        im_opencv = cv2.cvtColor(im_opencv, cv2.COLOR_BGRA2BGR)
+        im_opencv = cv2.resize(im_opencv, (0, 0), fx=0.5, fy=0.5)
+        # cv2.imwrite("im_opencv.jpg", im_opencv, [int(cv2.IMWRITE_JPEG_QUALITY), 100])  # 保存
+        # 利用yolo模型进行目标检测
+        result = model(im_opencv)
+        cv2.imshow("im_opencv", result[0].plot())  # 显示
+        key = cv2.waitKey(10)
+        if key & 0xFF == ord('q'): # 识别到按'q'键，退出
+            print('正在退出窗口')
+            cv2.destroyAllWindows()
+            break
+```
+
+下面展示一下最终效果，由于本人精力有限，只采集了150张图片作为数据集，整体识别效果一般；但是通过这么一个实现过程，确实能够帮助大家入门yolo
+
+![原神目标识别](基于yolo的原神钓鱼目标检测/原神目标识别.gif)
 
 Reference：
 
