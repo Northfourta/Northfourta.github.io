@@ -8,12 +8,17 @@ tags:
 ## 1、YOLO 环境配置
 ### 1.1 安装 CUDA 和 cudnn
 参考之前写的 [博客](https://blog.csdn.net/weixin_44349241/article/details/114333235)，按其中步骤安装即可。这里安装的是 version 为 11.2 的cuda。
+
 ### 1.2 安装 pytorch-gpu
+
 去 [torch官网](https://pytorch.org/get-started/previous-versions/) 寻找与自己 cuda 版本相对应的 pytorch，这里我没有找到对应 cuda-11.2 版本的torch安装命令，于是选择了安装 cuda-11.1 的torch（**自己安装torch的cuda版本应不能超过电脑的 cuda 版本**）
 ```bash
 pip install torch==1.8.1+cu111 torchvision==0.9.1+cu111 torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.html
 ```
+
+
 > 建议先安装 torch，再安装 yolo；若先安装 yolo，系统会自行安装 torch-cpu，还需卸载
+
 ### 1.3 安装 YOLOv8
 
 git 拉取 [ultralytics: YOLOv8 🚀 Ultralytics 同步更新官方最新版 YOLOv8 (gitee.com)](https://gitee.com/monkeycc/ultralytics):
@@ -86,10 +91,12 @@ pip install labelme
 # or install standalone executable/app from:
 # https://github.com/wkentaro/labelme/releases
 ```
-运行
+运行命令，启动 labelimg
 ```bash
 labelme
 ```
+
+
 ### 2.3 LabelImg安装
 
 参考 [github主页](https://github.com/HumanSignal/labelImg)安装步骤安装：
@@ -100,11 +107,13 @@ conda install -c anaconda lxml
 pyrcc5 -o libs/resources.py resources.qrc
 python labelImg.py
 python labelImg.py [IMAGE_PATH] [PRE-DEFINED CLASS FILE]
+----------------------------
+pip install labelimg -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
 ## 3、训练模型
 
-### 2.1 创建数据加载配置文件
+### 3.1 创建数据加载配置文件
 
 新建data文件夹（可自定义），再在data目录下新建images, labels, data.yaml 
 
@@ -120,9 +129,10 @@ python labelImg.py [IMAGE_PATH] [PRE-DEFINED CLASS FILE]
 
 ---
 
-### 2.2 创建数据集
+### 3.2 创建数据集
 
 步骤（YOLO）：
+
 1. 在 data/predefined_classes.txt 文件中定义将用于训练的类别列表。
 2. 使用上述说明构建并启动。
 3. 在工具栏中的“保存”按钮正下方，点击“PascalVOC”按钮切换到YOLO格式。
@@ -133,7 +143,7 @@ python labelImg.py [IMAGE_PATH] [PRE-DEFINED CLASS FILE]
 
 在处理图像列表时，您的标签列表不应该在处理过程中更改。当您保存一张图像时，classes.txt也会被更新，而之前的注释不会被更新。在保存为YOLO格式时，不应使用“默认类别”功能，它不会被引用。保存为YOLO格式时，“difficult”标志会被丢弃。
 
-### 2.3 数据集划分
+### 3.3 数据集划分
 
  在前面创建的imges及labels文件夹下存放划分后的数据集
 
@@ -223,7 +233,7 @@ if __name__ == '__main__':
 
 ![](image-20240103111433341.png)
 
-### 2.3 模型训练
+### 3.4 模型训练
 
 ```bash
 yolo task=detect mode=train model=yolov8s.yaml data=mydata_tuomin/tuomin.yaml epochs=100 batch=4 device=0
