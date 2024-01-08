@@ -1,9 +1,18 @@
 ---
 title: 基于yolo的原神钓鱼目标检测
 date: 2023-12-28 18:45:10
+categories:
+- 项目
+- 教程
 tags:
-
+- YOLO
+- 机器学习
+- Pytorch
 ---
+
+原神启动！原批变身！恰好把之前抽的雷神培养一下，正好没有专武，想着把鱼叉弄一下。自己又不想钓鱼，正好就试着把原神自动钓鱼项目[（基于深度强化学习的原神自动钓鱼AI）](https://github.com/IrisRainbowNeko/genshin_auto_fish)复现一下 ，于是便有了这篇博文。
+
+<!-- more -->
 
 ## 1、YOLO 环境配置
 ### 1.1 安装 CUDA 和 cudnn
