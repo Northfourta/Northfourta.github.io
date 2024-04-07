@@ -3,7 +3,6 @@ title: 基于yolo的原神钓鱼目标检测
 date: 2023-12-28 18:45:10
 categories:
 - 项目
-- 教程
 tags:
 - YOLO
 - 机器学习
