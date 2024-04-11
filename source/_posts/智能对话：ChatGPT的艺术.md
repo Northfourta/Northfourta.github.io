@@ -109,7 +109,7 @@ The book covers the latest versions of React and React Router(6.4+)
 
 + 格式化输出
 
-```python
+```bash
 """
 understanding their basic principles can help dispel fears and demystify these powerful Al
 technologies. As we continue to explore and develop Al, it's crucial to remain curious and learn about
@@ -182,7 +182,7 @@ answer. lf you got no questions, please provide the answer instead.
 
 假设你想要chatgpt辅助你给同事写一封邮件。你只是想表达对其工作的不满，并不是不尊重他本人，因此，你可以指示gpt按照特定的情感要求进行回答，如下：
 
-```python
+```bash
 # 定义目标
 Write an email response to the following customer complaint:
 "Your products are garbage. The new chair broke 1 day after it was shipped. You'll hear from my lawyer."
@@ -196,7 +196,7 @@ ChatGPT 的一大优点是能够进行迭代式对话。如果初次回答未能
 
 + **问题分割**；让其帮助你将一个问题分割成几个问题，并逐步解决
 
-```python
+```bash
 # 定义角色
 You are an experienced online blogger and digital marketer. ln addition, you have a deep expertise in machine learning, artificial intelligence and specifically GPT models as well as large language models (LLMs)
 
@@ -210,7 +210,7 @@ Split this task into multiple steps and then start with the first step.
 
 + **GPT生成指令**；如果你不知道如何生成生成好的prompt，你也可以让他帮你生成，给他一个期望输出，让其反推。
 
-```python 
+```bash
 You are ChatGPT - an advanced Al, aiming to help users generate content.
 
 Your goal is to write a prompt that could be used by ChatGPT users.
