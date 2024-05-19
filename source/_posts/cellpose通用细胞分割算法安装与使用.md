@@ -38,7 +38,7 @@ categories: 教程
 终端中运行如下命令，将在本地电脑上部署环境
 
 ```BASH
-$  conda env create -f myenv.yaml
+$  conda env create -f environment.yaml
 ```
 
 等待下载完成，激活新环境
