@@ -1,5 +1,5 @@
 ---
-title: cellpose通用细胞分割算法安装与使用
+title: Cellpose通用细胞分割算法安装与使用
 date: 2024-05-19 14:03:37
 tags:
 - Pytorch
