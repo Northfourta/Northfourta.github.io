@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>STM32手册</title>
+    <link href="/2024/12/22/STM32%E6%89%8B%E5%86%8C/"/>
+    <url>/2024/12/22/STM32%E6%89%8B%E5%86%8C/</url>
+    
+    <content type="html"><![CDATA[<p>第一次接触单片机还是在大二那个暑假，初次使用的是Arduino平台，在它上面完成了电子小白-电灯大师-循迹小车的过程，算是初步入门了。但也仅此而已了，虽然后期尝试学习STM32，但都没有很好的坚持下来，平衡小车项目也就此搁置。</p><p>如今的我已经初入职场，成为打工牛马，过去五个月一直浑浑噩噩，迷茫。也正是此时，碰上公司裁员。回想自己过去五个月的经历，似乎没有什么收获成长。这份工作能够干多久，下一步又该怎么办？我不知道。不管怎样，只要在制造业继续从业，就免不了要和单片机接触。于是，我决定利用业余时间重拾STM32。相比于STM32在工业界的地位，Arduino更像是给小白提供的一种玩具。本篇博文将会记录我关于STM32的所有学习相关笔记及感想！</p><span id="more"></span><p>　</p><h1 id="初识stm32">1. 初识STM32</h1><p>STM32是ST公司基于ARMCortex-M内核开发的32位微控制器，常应用在嵌入式领域，如智能车、无人机、机器人、无线通信、物联网、工业控制、娱乐电子产品等。STM32系列包括多个子系列，每个子系列针对特定的应用场景和需求进行了优化。</p><figure><img src="/2024/12/22/STM32%E6%89%8B%E5%86%8C/ganquan/Projects/Northfourta.github.io/source/_posts/STM32手册/image-20241222221423636.png" alt="image-20241222221423636"><figcaption aria-hidden="true">image-20241222221423636</figcaption></figure><h2 id="stm32f103c8t6">1.1 STM32F103C8T6</h2><p>STM32F103C8T6属于STM32F1主流系列，是基于Cortex-M3内核的一款STM32经典处理器，也是大学生用于各类机器人及科技竞赛最常见的MCU。其采用LQFP48封装，主频72MHz，RAM大小20K，ROM大小64K，供电电压为2.0～3.6V。</p><figure><img src="/2024/12/22/STM32%E6%89%8B%E5%86%8C/ganquan/Projects/Northfourta.github.io/source/_posts/STM32手册/image-20241222222943018.png" alt="image-20241222222943018"><figcaption aria-hidden="true">image-20241222222943018</figcaption></figure><p>STM32功能强大、性能优异、片上资源丰富、具有<strong>丰富的外设</strong>：包括ADC、DAC、定时器、串口、I2C、SPI、USB、以太网、CAN等，支持多种通信和控制接口。</p><figure><img src="/2024/12/22/STM32%E6%89%8B%E5%86%8C/ganquan/Projects/Northfourta.github.io/source/_posts/STM32手册/image-20241222223157232.png" alt="image-20241222223157232"><figcaption aria-hidden="true">image-20241222223157232</figcaption></figure><p>STM产品型号字符均有意义，拿STM32F103C8T6，其每个字符代表如下意义</p><figure><img src="/2024/12/22/STM32%E6%89%8B%E5%86%8C/ganquan/Projects/Northfourta.github.io/source/_posts/STM32手册/image-20241222223329124.png" alt="image-20241222223329124"><figcaption aria-hidden="true">image-20241222223329124</figcaption></figure><h2 id="系统结构">1.2 系统结构</h2><figure><img src="/2024/12/22/STM32%E6%89%8B%E5%86%8C/ganquan/Projects/Northfourta.github.io/source/_posts/STM32手册/image-20241222223557914.png" alt="image-20241222223557914"><figcaption aria-hidden="true">image-20241222223557914</figcaption></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>学习笔记-硬件</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>电子电路</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>毛选一卷之中国社会各阶级的分析读书笔记</title>
     <link href="/2024/06/13/%E6%AF%9B%E9%80%89%E4%B8%80%E5%8D%B7%E4%B9%8B%E4%B8%AD%E5%9B%BD%E7%A4%BE%E4%BC%9A%E5%90%84%E9%98%B6%E7%BA%A7%E5%88%86%E6%9E%90%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
     <url>/2024/06/13/%E6%AF%9B%E9%80%89%E4%B8%80%E5%8D%B7%E4%B9%8B%E4%B8%AD%E5%9B%BD%E7%A4%BE%E4%BC%9A%E5%90%84%E9%98%B6%E7%BA%A7%E5%88%86%E6%9E%90%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</url>
