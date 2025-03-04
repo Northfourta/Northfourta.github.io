@@ -103,7 +103,7 @@ $$
 
 基本定时器结构最简单，仅由时基单元、触发控制器构成。来自内部时钟源（内部晶振）产生的方波信号经由TIMxCLK传入触发控制器，随后经由时基单元计数，当计数值达到重载寄存器设定值，触发中断/事件。当中断配置到TRGO，将直接触发DAC实现硬件中断，不必经过CPU处理，这样就可以节省CPU资源，尤其是在数模转换这种频繁使用的场景，可以减少中断造成的CPU执行卡顿。
 
-![image.png](STM32定时器实战：内部时钟轻松实现秒表计时/image 1.png)
+![image1.png](STM32定时器实战：内部时钟轻松实现秒表计时/image 1.png)
 
 - 通用定时器
 
@@ -111,18 +111,18 @@ $$
 
 通用定时器的内外时钟源除了可使用内部RCC的晶振时钟源，还可选择外接晶振，或者外部能够产生方波信号的设备作为时钟源；输入捕获可实现测量外部信号的脉冲宽度或频率的功能；输出比较常用于产生PWM，进行电机的控制；编码器接口则可直接使用硬件中断对电机速度进行测量。
 
-![image.png](STM32定时器实战：内部时钟轻松实现秒表计时/image 2.png)
+![image2.png](STM32定时器实战：内部时钟轻松实现秒表计时/image 2.png)
 
 - 高级定时器
 
 高级定时器则拥有通用定时器全部功能，并额外具有重复计数器、死区生成、互补输出、刹车输入等功能
 
-![image.png](STM32定时器实战：内部时钟轻松实现秒表计时/image 3.png)
+![image3.png](STM32定时器实战：内部时钟轻松实现秒表计时/image 3.png)
 
 <aside>
 ✅ 定时器流程分为时钟源选择、时基单元计数、中断输出配置第三个阶段
 
-![image.png](/Users/ganquan/Library/CloudStorage/OneDrive-mails.ucas.ac.cn/STM32Project/STM32定时器实战/3b720226-6639-4fd7-99d8-728b922351a2_Export-f8802dac-7998-4057-b5ee-ccaf6bbe878f/STM32 定时器实战：内部时钟轻松实现秒表计时 19dcabdc5e28806cb314e58a4b5337d9/image 4.png)
+![image4.png](STM32定时器实战：内部时钟轻松实现秒表计时/image 4.png)
 
 ## 3.2 定时器配置
 
@@ -130,11 +130,11 @@ $$
 
 1. 开启定时器时钟并配置时钟模式
 
-![image.png](STM32定时器实战：内部时钟轻松实现秒表计时/image 5.png)
+![image5.png](STM32定时器实战：内部时钟轻松实现秒表计时/image 5.png)
 
 1. 时基单元初始化及参数配置
 
-![image.png](STM32定时器实战：内部时钟轻松实现秒表计时/image 6.png)
+![image6.png](STM32定时器实战：内部时钟轻松实现秒表计时/image 6.png)
 
 1. 定时器中断开启
 
@@ -145,7 +145,7 @@ void TIM_ITConfig(TIM_TypeDef* TIMx, u16 TIM_IT, FunctionalStateNewState)
 
 1. NVIC配置
 
-![image.png](STM32定时器实战：内部时钟轻松实现秒表计时/image 7.png)
+![image7.png](STM32定时器实战：内部时钟轻松实现秒表计时/image 7.png)
 
 1. 定时器中断使能开启
 
@@ -172,7 +172,7 @@ void NVIC_Init(NVIC_InitTypeDef* NVIC_InitStruct)
 - 软件：`Keil5`
 - 依赖库：`STM32标准库`
 
-![6-1 定时器定时中断.jpg](/Users/ganquan/Library/CloudStorage/OneDrive-mails.ucas.ac.cn/STM32Project/STM32定时器实战/3b720226-6639-4fd7-99d8-728b922351a2_Export-f8802dac-7998-4057-b5ee-ccaf6bbe878f/STM32 定时器实战：内部时钟轻松实现秒表计时 19dcabdc5e28806cb314e58a4b5337d9/6-1_定时器定时中断.jpg)
+![6-1 定时器定时中断.jpg](STM32定时器实战：内部时钟轻松实现秒表计时/6-1_定时器定时中断.jpg)
 
 代码实现（[工程代码GitHub链接点击我](https://github.com/Northfourta/STM32ForBeginner/tree/main/6-1%20%E5%AE%9A%E6%97%B6%E5%99%A8%E4%B8%AD%E6%96%AD%E5%AE%9E%E7%8E%B0%E5%AE%9A%E6%97%B6)）：
 
@@ -276,13 +276,12 @@ void Timer_Init(void)
 - 软件：`Keil5`
 - 依赖库：`STM32标准库`
 
-![6-2 定时器外部时钟.jpg](/Users/ganquan/Library/CloudStorage/OneDrive-mails.ucas.ac.cn/STM32Project/STM32定时器实战/3b720226-6639-4fd7-99d8-728b922351a2_Export-f8802dac-7998-4057-b5ee-ccaf6bbe878f/STM32 定时器实战：内部时钟轻松实现秒表计时 19dcabdc5e28806cb314e58a4b5337d9/6-2_定时器外部时钟.jpg)
+![6-2 定时器外部时钟.jpg](STM32定时器实战：内部时钟轻松实现秒表计时/6-2_定时器外部时钟.jpg)
 
 <aside>
 ❓ 外部时钟源通过GPIO14接口输入，程序无法实现
-
   依据参考手册，TIM2只可使用PA0、PA15端口
-  ![image.png](STM32定时器实战：内部时钟轻松实现秒表计时/image 8.png)
+  ![image8.png](STM32定时器实战：内部时钟轻松实现秒表计时/image 8.png)
 
 <aside>
 ❓ 出现TIM_Counter值乱跳现象
@@ -291,7 +290,7 @@ void Timer_Init(void)
 
 解决：配置外部时钟的滤波器，降低采样频率，可以一定程度滤掉数据抖动
 
-![image.png](STM32定时器实战：内部时钟轻松实现秒表计时/image 9.png)
+![image9.png](STM32定时器实战：内部时钟轻松实现秒表计时/image 9.png)
 
 <aside>
 ❓ TIM_PSC的影响? 当TIM_PSC由0更改为9时，时钟信号每变化10次，才会触发TIM_Counter变化一次
